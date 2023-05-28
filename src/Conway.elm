@@ -6,8 +6,10 @@ type alias Cell = Bool
 type alias Row = Array Cell
 type alias Matrix = Array Row
 
+sideLength = 100
+
 empty : Matrix
-empty = Array.repeat 100 (Array.repeat 100 False)
+empty = Array.repeat sideLength (Array.repeat sideLength False)
 
 -- This is probably wildly unperformant, and I am ashamed
 tick : Matrix -> Matrix
