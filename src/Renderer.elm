@@ -4,7 +4,6 @@ import Array exposing (Array)
 import Common exposing (Point)
 import Conway exposing (Matrix)
 import Html exposing (Html)
-import Set
 import Svg exposing (Svg, svg, rect)
 import Svg.Attributes exposing (..)
 import Svg.Events exposing (onClick)
@@ -28,7 +27,7 @@ cells ((x1, y1), (x2, y2)) matrix msg =
 
 mkCell : Msg msg -> Int -> Int -> Matrix -> Svg msg
 mkCell msg rowNum colNum matrix =
-    let fillColor = if Set.member (rowNum, colNum) matrix then "black" else "white"
+    let fillColor = if Conway.at matrix (rowNum, colNum) then "black" else "white"
     in rect [ fill fillColor
             , x (String.fromInt (rowNum * cellSize))
             , y (String.fromInt (colNum * cellSize))

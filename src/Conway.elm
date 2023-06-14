@@ -1,4 +1,4 @@
-module Conway exposing (Matrix, empty, tick, toggle)
+module Conway exposing (Matrix, at, empty, tick, toggle)
 
 import Common exposing (Point)
 import Set exposing (Set)
