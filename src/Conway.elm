@@ -1,8 +1,8 @@
-module Conway exposing (Matrix, Point, empty, tick, toggle)
+module Conway exposing (Matrix, empty, tick, toggle)
 
+import Common exposing (Point)
 import Set exposing (Set)
 
-type alias Point = (Int, Int)
 type alias Matrix = Set Point
 
 empty : Matrix

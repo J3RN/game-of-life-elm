@@ -1,9 +1,10 @@
 module Renderer exposing (cells)
 
-import Conway exposing (Matrix, Point)
 
 import Array exposing (Array)
 
+import Common exposing (Point)
+import Conway exposing (Matrix)
 import Html exposing (Html)
 
 import Set
