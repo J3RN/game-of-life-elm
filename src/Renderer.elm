@@ -1,5 +1,4 @@
-module Renderer exposing (cells)
-
+module Renderer exposing (Bounds, cells)
 
 import Array exposing (Array)
 
@@ -13,11 +12,12 @@ import Svg exposing (Svg, svg, rect)
 import Svg.Attributes exposing (..)
 import Svg.Events exposing (onClick)
 
+type alias Bounds = ((Int, Int), (Int, Int))
 type alias Msg msg = (Point -> msg)
 
 cellSize = 10
 
-cells : ((Int, Int), (Int, Int)) -> Matrix -> Msg msg -> Html msg
+cells : Bounds -> Matrix -> Msg msg -> Html msg
 cells ((x1, y1), (x2, y2)) matrix msg =
     let xRange = List.range x1 x2
         yRange = List.range y1 y2
