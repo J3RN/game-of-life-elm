@@ -2,13 +2,13 @@ module Main exposing (main)
 
 import Array exposing (Array)
 import Browser exposing (element)
-import Conway exposing (Matrix, Point, tick)
-import Renderer exposing (cells)
 import Common exposing (Point)
+import Conway exposing (Matrix, tick)
 import Html exposing (Html, br, button, div, h1, text)
 import Html.Attributes exposing (class)
 import Html.Events exposing (onClick)
 import Maybe exposing (Maybe)
+import Renderer exposing (cells)
 import Time exposing (Posix)
 
 main = Browser.element

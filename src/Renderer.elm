@@ -1,13 +1,10 @@
 module Renderer exposing (Bounds, cells)
 
 import Array exposing (Array)
-
 import Common exposing (Point)
 import Conway exposing (Matrix)
 import Html exposing (Html)
-
 import Set
-
 import Svg exposing (Svg, svg, rect)
 import Svg.Attributes exposing (..)
 import Svg.Events exposing (onClick)
