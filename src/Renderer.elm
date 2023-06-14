@@ -30,7 +30,7 @@ mkCell msg rowNum colNum matrix =
     let fillColor = case QuAnts.at matrix (rowNum, colNum) of
                         White -> "white"
                         Red   -> "red"
-                        Green -> "green"
+                        Green -> "lime"
                         Blue  -> "blue"
     in rect [ fill fillColor
             , x (String.fromInt (rowNum * cellSize))
