@@ -2,7 +2,7 @@ module Renderer exposing (Bounds, cells)
 
 import Array exposing (Array)
 import Common exposing (Point)
-import Conway exposing (Matrix)
+import QuAnts exposing (Cell (..), Matrix)
 import Html exposing (Html)
 import Svg exposing (Svg, svg, rect)
 import Svg.Attributes exposing (..)
@@ -27,7 +27,11 @@ cells ((x1, y1), (x2, y2)) matrix msg =
 
 mkCell : Msg msg -> Int -> Int -> Matrix -> Svg msg
 mkCell msg rowNum colNum matrix =
-    let fillColor = if Conway.at matrix (rowNum, colNum) then "black" else "white"
+    let fillColor = case QuAnts.at matrix (rowNum, colNum) of
+                        White -> "white"
+                        Red   -> "red"
+                        Green -> "green"
+                        Blue  -> "blue"
     in rect [ fill fillColor
             , x (String.fromInt (rowNum * cellSize))
             , y (String.fromInt (colNum * cellSize))

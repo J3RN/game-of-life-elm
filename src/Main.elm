@@ -3,7 +3,7 @@ module Main exposing (main)
 import Array exposing (Array)
 import Browser exposing (element)
 import Common exposing (Point)
-import Conway exposing (Matrix, tick)
+import QuAnts exposing (Matrix, tick)
 import Html exposing (Html, br, button, div, h1, text)
 import Html.Attributes exposing (class, id)
 import Html.Events exposing (onClick)
@@ -27,7 +27,7 @@ type alias Model = { bounds : (Point, Point)
 
 init : () -> (Model, Cmd Msg)
 init _ = ( { bounds = ((0, 0), (100, 100))
-           , matrix = Conway.empty
+           , matrix = QuAnts.empty
            , paused = True
            }
          , Cmd.none)
@@ -44,7 +44,7 @@ update : Msg -> Model -> (Model, Cmd Msg)
 update msg model =
     case msg of
         Toggle point ->
-            ( { model | matrix = Conway.toggle model.matrix point }
+            ( { model | matrix = QuAnts.toggle model.matrix point }
             , Cmd.none
             )
 
@@ -60,7 +60,7 @@ update msg model =
             ( { model | paused = False }, Cmd.none )
 
         Clear ->
-            ( { model | matrix = Conway.empty }, Cmd.none )
+            ( { model | matrix = QuAnts.empty }, Cmd.none )
 
 -- Subscriptions
 
