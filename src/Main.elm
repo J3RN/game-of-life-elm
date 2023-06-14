@@ -5,7 +5,7 @@ import Browser exposing (element)
 import Common exposing (Point)
 import Conway exposing (Matrix, tick)
 import Html exposing (Html, br, button, div, h1, text)
-import Html.Attributes exposing (class)
+import Html.Attributes exposing (class, id)
 import Html.Events exposing (onClick)
 import Maybe exposing (Maybe)
 import Renderer exposing (cells)
@@ -71,10 +71,11 @@ subscriptions _ = Time.every 35 Tick
 
 view : Model -> Html Msg
 view model =
-    div [] [ h1 [] [ text "Conway's Game of Life" ]
-           , div [ class "controls" ]
-                 [ playPause model.paused
-                 , button [ onClick Clear ] [ text "Clear" ] ]
+    div [ id "main" ] [
+         div [ class "controls" ]
+             [ playPause model.paused
+             , button [ onClick Clear ] [ text "Clear" ]
+             ]
            , cells model.bounds model.matrix Toggle
            ]
 

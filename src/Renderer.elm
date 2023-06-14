@@ -22,8 +22,6 @@ cells ((x1, y1), (x2, y2)) matrix msg =
         widthStr = String.fromInt ((x2 - x1) * cellSize)
         rects = List.concatMap (\x -> List.map (\y -> mkCell msg x y matrix) yRange) xRange
     in svg [ style "border: 1px solid black"
-           , width widthStr
-           , height heightStr
            , viewBox ("0 0 " ++ widthStr ++ " " ++ heightStr)]
            rects
 
