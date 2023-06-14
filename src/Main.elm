@@ -2,7 +2,7 @@ module Main exposing (main)
 
 import Array exposing (Array)
 import Browser exposing (element)
-import Conway exposing (Matrix, tick)
+import Conway exposing (Matrix, Point, tick)
 import Renderer exposing (cells)
 import Html exposing (Html, br, button, div, h1, text)
 import Html.Attributes exposing (class)
@@ -19,12 +19,14 @@ main = Browser.element
 
 -- Init
 
-type alias Model = { matrix : Matrix
+type alias Model = { bounds : (Point, Point)
+                   , matrix : Matrix
                    , paused : Bool
                    }
 
 init : () -> (Model, Cmd Msg)
-init _ = ( { matrix = Conway.empty
+init _ = ( { bounds = ((0, 0), (100, 100))
+           , matrix = Conway.empty
            , paused = True
            }
          , Cmd.none)
@@ -32,7 +34,7 @@ init _ = ( { matrix = Conway.empty
 -- Update
 
 type Msg = Tick Posix
-         | Toggle Int Int
+         | Toggle Point
          | Pause
          | UnPause
          | Clear
@@ -40,8 +42,8 @@ type Msg = Tick Posix
 update : Msg -> Model -> (Model, Cmd Msg)
 update msg model =
     case msg of
-        Toggle y x ->
-            ( { model | matrix = Conway.toggle y x model.matrix }
+        Toggle point ->
+            ( { model | matrix = Conway.toggle model.matrix point }
             , Cmd.none
             )
 
@@ -72,7 +74,7 @@ view model =
            , div [ class "controls" ]
                  [ playPause model.paused
                  , button [ onClick Clear ] [ text "Clear" ] ]
-           , cells model.matrix Toggle
+           , cells model.bounds model.matrix Toggle
            ]
 
 playPause : Bool -> Html Msg

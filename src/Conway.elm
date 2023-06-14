@@ -1,62 +1,60 @@
-module Conway exposing (Matrix, empty, tick, toggle)
+module Conway exposing (Matrix, Point, empty, tick, toggle)
 
-import Array exposing (Array)
+import Set exposing (Set)
 
-type alias Cell = Bool
-type alias Row = Array Cell
-type alias Matrix = Array Row
-
-sideLength = 100
+type alias Point = (Int, Int)
+type alias Matrix = Set Point
 
 empty : Matrix
-empty = Array.repeat sideLength (Array.repeat sideLength False)
+empty = Set.empty
 
--- This is probably wildly unperformant, and I am ashamed
 tick : Matrix -> Matrix
 tick matrix =
-    Array.indexedMap (tickRow matrix) matrix
+    let pointsToConsider = considerPoints matrix
+    in Set.foldl (tickPoint matrix) Set.empty pointsToConsider
 
-tickRow : Matrix -> Int -> Row -> Row
-tickRow matrix rowNum row =
-    Array.indexedMap (tickCell matrix rowNum) row
+considerPoints : Matrix -> Set Point
+considerPoints matrix =
+    matrix
+        |> Set.toList
+        |> List.concatMap (\point -> point::(surroundingPoints point))
+        |> Set.fromList
 
-tickCell : Matrix -> Int -> Int -> Bool -> Bool
-tickCell matrix rowNum colNum val =
-    let n = numSurrounding matrix rowNum colNum
-    in if (not val) && n == 3 then True
-       else if val && n >= 2 && n <= 3 then val
-       else False
+tickPoint : Matrix -> Point -> Matrix -> Matrix
+tickPoint matrix point newMatrix =
+    let n = numSurrounding matrix point
+        val = Set.member point matrix
+    in if (not val) && n == 3 then Set.insert point newMatrix
+       else if val && n >= 2 && n <= 3 then Set.insert point newMatrix
+       else newMatrix
 
-numSurrounding : Matrix -> Int -> Int -> Int
-numSurrounding matrix rowNum colNum =
+surroundingPoints : Point -> List Point
+surroundingPoints (x, y) =
     -- Could I generate these?  Sure!  Where's the fun in that, though?
-    let indices = [ (rowNum - 1, colNum - 1)
-                  , (rowNum - 1, colNum)
-                  , (rowNum - 1, colNum + 1)
-                  , (rowNum, colNum - 1)
-                  , (rowNum, colNum + 1)
-                  , (rowNum + 1, colNum - 1)
-                  , (rowNum + 1, colNum)
-                  , (rowNum + 1, colNum + 1)
-                  ]
-    in indices
-        |> List.map (\(y, x) -> at matrix y x)
-        |> List.filter (\x -> x)
+    [ (x - 1, y - 1)
+    , (x - 1, y)
+    , (x - 1, y + 1)
+    , (x,     y - 1)
+    , (x,     y + 1)
+    , (x + 1, y - 1)
+    , (x + 1, y)
+    , (x + 1, y + 1)
+    ]
+
+numSurrounding : Matrix -> Point -> Int
+numSurrounding matrix point =
+    point
+        |> surroundingPoints
+        |> List.filter (at matrix)
         |> List.length
 
--- If the indicated cells is out-of-bounds, False is returned
-at : Matrix -> Int -> Int -> Bool
-at matrix rowNum colNum =
-    let mRow = Array.get rowNum matrix
-        mVal = Maybe.andThen (Array.get colNum) mRow
-    in Maybe.withDefault False mVal
+at : Matrix -> Point -> Bool
+at matrix point =
+    Set.member point matrix
 
-toggle : Int -> Int -> Matrix -> Matrix
-toggle rowNum colNum matrix =
-    -- This code bigtime sucks.  Applicative would make it better, but I'm sure
-    -- there's other ways.
-    let oldRow = Array.get rowNum matrix
-        oldVal = Maybe.andThen (Array.get colNum) oldRow
-        newRow = Maybe.andThen (\row -> Maybe.map (\old -> Array.set colNum (not old) row) oldVal) oldRow
-        newMatrix = Maybe.map (\row -> Array.set rowNum row matrix) newRow
-    in Maybe.withDefault matrix newMatrix
+toggle : Matrix -> Point -> Matrix
+toggle matrix point =
+    if Set.member point matrix then
+        Set.remove point matrix
+    else
+        Set.insert point matrix
